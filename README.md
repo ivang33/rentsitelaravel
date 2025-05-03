@@ -16,11 +16,11 @@ RewriteRule ^(.*)$ public/$1 [L]
 1. Склонируйте репозиторий
 ```shell
 cd domains
-git clone https://github.com/Alomon/laravel12.git
+git clone https://github.com/ivang33/rentsitelaravel
 ```
 2. Установите composer-зависимостей
 ```shell
-cd laravel12
+cd rentsitelaravel
 composer install
 ```
 3. Скопируйте файл .env.example в .env
@@ -49,4 +49,12 @@ SESSION_DOMAIN=null
 6. Создайте жесткую ссылку на хранилище файлов
 ```shell
 php artisan storage:link
+```
+7. Запуск миграций
+```shell
+php artisan migrate
+```
+8. Прогон сидеров для создания ролей (для регистрации)
+```shell
+php artisan db:seed
 ```
