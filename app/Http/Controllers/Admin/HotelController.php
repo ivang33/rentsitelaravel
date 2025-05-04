@@ -2,64 +2,92 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Hotel;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class HotelController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $hotels = Hotel::with('city')->latest()->paginate(10);
+        return view('admin.hotels.index', compact('hotels'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $cities = \App\Models\City::all();
+        return view('admin.hotels.create', compact('cities'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'hotel_name' => 'required|string|max:255',
+            'city_id' => 'required|exists:cities,id',
+            'address' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'stars' => 'required|integer|min:1|max:5',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $photoPath = null;
+        if ($request->hasFile('image')) {
+            $photoPath = $request->file('image')->store('hotels', 'public');
+        }
+
+        Hotel::create([
+            'hotel_name' => $request->hotel_name,
+            'city_id' => $request->city_id,
+            'address' => $request->address,
+            'description' => $request->description,
+            'stars' => $request->stars,
+            'photo' => $photoPath,
+        ]);
+
+        return redirect()->route('admin.hotels.index')->with('success', 'Отель успешно добавлен');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Hotel $hotel)
     {
-        //
+        $cities = \App\Models\City::all();
+        return view('admin.hotels.edit', compact('hotel', 'cities'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Hotel $hotel)
     {
-        //
+        $validated = $request->validate([
+            'hotel_name' => 'required|string|max:255',
+            'city_id' => 'required|exists:cities,id',
+            'address' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'stars' => 'required|integer|min:1|max:5',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            if ($hotel->photo) {
+                Storage::disk('public')->delete($hotel->photo);
+            }
+            $validated['photo'] = $request->file('image')->store('hotels', 'public');
+        }
+
+        $hotel->update($validated);
+
+        return redirect()->route('admin.hotels.index')
+            ->with('success', 'Отель успешно обновлен');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Hotel $hotel)
     {
-        //
-    }
+        if ($hotel->photo) {
+            Storage::disk('public')->delete($hotel->photo);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $hotel->delete();
+
+        return redirect()->route('admin.hotels.index')
+            ->with('success', 'Отель успешно удален');
     }
 }

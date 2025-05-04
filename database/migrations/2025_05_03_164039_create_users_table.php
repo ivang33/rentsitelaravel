@@ -15,6 +15,7 @@ class CreateUsersTable extends Migration
             $table->string('phone')->nullable();
             $table->string('avatar')->nullable();
             $table->foreignId('role_id')->constrained('roles'); // Связь с таблицей roles
+            $table->date('birthday')->nullable();
             $table->timestamps();
         });
     }

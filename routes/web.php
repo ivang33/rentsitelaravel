@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ApartmentController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,12 @@ Route::resource('apartments', ApartmentController::class)
         'index' => 'apartments.index',
         'show' => 'apartments.show'
     ]);
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+});
 
 // Аутентификация
 Route::middleware('guest')->group(function () {
@@ -75,7 +82,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
             'destroy' => 'hotels.destroy'
         ]);
 
-    // Управление апартаментами
+// Управление апартаментами
     Route::resource('apartments', ApartmentController::class)
         ->except(['show', 'index'])
         ->names([
@@ -85,7 +92,6 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
             'update' => 'apartments.update',
             'destroy' => 'apartments.destroy'
         ]);
-
     // Дополнительные маршруты
     Route::get('statistics', [DashboardController::class, 'statistics'])
         ->name('statistics');

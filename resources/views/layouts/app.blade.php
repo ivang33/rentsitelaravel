@@ -14,24 +14,38 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto align-items-center">
                 @auth
+                    <!-- Аватар пользователя с выпадающим меню -->
+                    <li class="nav-item dropdown me-3">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('public/default_avatar.png') }}"
+                                 alt="Аватар"
+                                 class="rounded-circle"
+                                 width="50"
+                                 height="50"
+                                 style="object-fit: cover;">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="{{ route('profile.show') }}">Профиль</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">Выйти</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+
                     @if(auth()->user()->role_id == 1)
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-outline-light me-2" href="{{ route('admin.dashboard') }}">
+                        <li class="nav-item me-3">
+                            <a class="nav-link btn btn-outline-light" href="{{ route('admin.dashboard') }}">
                                 <i class="bi bi-speedometer2"></i> Админ-панель
                             </a>
                         </li>
                     @endif
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Профиль</a>
-                    </li>
-                    <li class="nav-item">
-                        <form action="{{ route('logout') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="nav-link btn btn-link">Выйти</button>
-                        </form>
-                    </li>
+
                 @else
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">Войти</a>

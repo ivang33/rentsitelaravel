@@ -18,7 +18,7 @@ class RegisterController extends \App\Http\Controllers\Controller
             'surname' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'patronymic' => 'nullable|string|max:255',
-            'birthday' => 'required|date',
+            'birthday' => 'required|date_format:Y-m-d', // Дата рождения
             'email' => 'required|string|email|max:255|unique:users',
             'phone' => 'nullable|string|max:20', // Максимальная длина номера телефона
             'password' => 'required|string|min:8|confirmed',

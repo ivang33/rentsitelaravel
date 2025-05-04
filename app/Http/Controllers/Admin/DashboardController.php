@@ -15,7 +15,11 @@ class DashboardController extends Controller
             'cities' => City::count(),
             'hotels' => Hotel::count(),
             'apartments' => Apartment::count(),
-            'recentCities' => City::latest()->take(5)->get()
+
+            // Последние 5 записей
+            'recentCities' => City::latest()->take(5)->get(),
+            'recentHotels' => Hotel::with('city')->latest()->take(5)->get(),
+            'recentApartments' => Apartment::with('hotel')->latest()->take(5)->get(),
         ];
 
         return view('admin.dashboard', compact('stats'));

@@ -2,64 +2,98 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Apartment;
+use App\Models\Hotel;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class ApartmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        // Получаем список всех отелей с их названиями
+        $hotels = Hotel::all(); // Здесь важно, чтобы отображалось hotel->hotel_name
+
+        return view('admin.apartments.create', compact('hotels'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'hotel_id' => 'required|exists:hotels,id',
+            'room_number' => 'required|string|max:50|unique:apartments',
+            'type' => 'required|string|max:100',
+            'price_per_night' => 'required|numeric|min:0',
+            'room_count' => 'required|integer|min:1',
+            'capacity' => 'required|integer|min:1',
+            'check_in_time' => 'required|date_format:H:i',
+            'check_out_time' => 'required|date_format:H:i',
+            'description' => 'nullable|string',
+            'descriptions' => 'nullable|string',
+            'additional_info' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'name_price' => 'required|string|max:255',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $validated['photo'] = $request->file('image')->store('apartments', 'public');
+        }
+
+        Apartment::create($validated);
+
+        return redirect()->route('admin.dashboard')
+            ->with('success', 'Апартаменты успешно созданы');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Apartment $apartment)
     {
-        //
+        // Получаем список всех отелей с их названиями
+        $hotels = Hotel::all(); // Здесь важно, чтобы отображалось hotel->hotel_name
+
+        return view('admin.apartments.edit', compact('apartment', 'hotels'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Apartment $apartment)
     {
-        //
+        $validated = $request->validate([
+            'hotel_id' => 'required|exists:hotels,id',
+            'room_number' => 'required|string|max:50|unique:apartments,room_number,' . $apartment->id,
+            'type' => 'required|string|max:100',
+            'price_per_night' => 'required|numeric|min:0',
+            'room_count' => 'required|integer|min:1',
+            'capacity' => 'required|integer|min:1',
+            'check_in_time' => 'required|date_format:H:i',
+            'check_out_time' => 'required|date_format:H:i',
+            'description' => 'nullable|string',
+            'descriptions' => 'nullable|string',
+            'additional_info' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'name_price' => 'required|string|max:255',
+        ]);
+
+        if ($request->hasFile('image')) {
+            if ($apartment->photo) {
+                Storage::disk('public')->delete($apartment->photo);
+            }
+            $validated['photo'] = $request->file('image')->store('apartments', 'public');
+        }
+
+        $apartment->update($validated);
+
+        return redirect()->route('admin.dashboard')
+            ->with('success', 'Апартаменты успешно обновлены');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Apartment $apartment)
     {
-        //
-    }
+        if ($apartment->photo) {
+            Storage::disk('public')->delete($apartment->photo);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $apartment->delete();
+
+        return redirect()->route('admin.dashboard')
+            ->with('success', 'Апартаменты успешно удалены');
     }
 }
