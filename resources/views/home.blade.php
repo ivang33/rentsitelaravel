@@ -33,14 +33,17 @@
         <div class="container">
             <h2>Популярные города</h2>
             <div class="row">
+                <!-- В resources/views/home.blade.php -->
                 @foreach ($cities as $city)
-                    <div class="col-md-3">
-                        <div class="card">
-                            <img src="{{ asset('storage/' . $city->photo) }}" class="card-img-top" alt="{{ $city->city_name }}">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $city->city_name }}</h5>
+                    <div class="col-md-3 mb-4">
+                        <a href="{{ route('cities.show', $city) }}" class="text-decoration-none">
+                            <div class="card h-100">
+                                <img src="{{ asset('storage/' . $city->photo) }}" class="card-img-top" alt="{{ $city->city_name }}" style="height: 180px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-dark">{{ $city->city_name }}</h5>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 @endforeach
             </div>

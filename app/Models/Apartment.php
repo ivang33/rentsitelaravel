@@ -17,8 +17,8 @@ class Apartment extends Model
         'price_per_night',
         'room_count',
         'capacity',
-        'check_in_time',
-        'check_out_time',
+        'check_in_date',
+        'check_out_date',
         'description',
         'descriptions',
         'additional_info',
@@ -26,8 +26,8 @@ class Apartment extends Model
     ];
 
     protected $casts = [
-        'check_in_time' => 'datetime:H:i',
-        'check_out_time' => 'datetime:H:i',
+        'check_in_date' => 'date',
+        'check_out_date' => 'date',
     ];
 
     public function hotel()

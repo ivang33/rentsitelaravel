@@ -1,23 +1,30 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Admin\CityController;
-use App\Http\Controllers\Admin\HotelController;
+use App\Http\Controllers\Admin\CityController as AdminCityController;
+use App\Http\Controllers\Admin\HotelController as AdminHotelController;
 use App\Http\Controllers\Admin\ApartmentController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CityController; // Публичный контроллер
+use App\Http\Controllers\HotelController;
 
-/*
-|--------------------------------------------------------------------------
-| Публичные маршруты
-|--------------------------------------------------------------------------
-*/
+// === Публичные маршруты ===
 
 // Главная страница
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Страница города с отелями (Публичная)
+Route::get('/cities/{city}', [CityController::class, 'show'])->name('cities.show');
+Route::get('/cities/{city}', [CityController::class, 'show'])->name('cities.show');
+Route::get('/cities/{city}/sort-by-price', [CityController::class, 'sortByPrice'])->name('cities.sort_by_price');
+Route::get('/cities/{city}/sort-by-rating', [CityController::class, 'sortByRating'])->name('cities.sort_by_rating');
+
+Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('hotels.show');
+
+
 
 // Просмотр апартаментов
 Route::resource('apartments', ApartmentController::class)
@@ -26,12 +33,6 @@ Route::resource('apartments', ApartmentController::class)
         'index' => 'apartments.index',
         'show' => 'apartments.show'
     ]);
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-});
 
 // Аутентификация
 Route::middleware('guest')->group(function () {
@@ -49,17 +50,25 @@ Route::middleware('guest')->group(function () {
 // Выход
 Route::middleware('auth')->post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+// Профиль пользователя
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+});
+
 /*
 |--------------------------------------------------------------------------
 | Админ-маршруты
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+
     // Дашборд
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Управление городами
-    Route::resource('cities', CityController::class)
+    // Управление городами (через Admin\CityController)
+    Route::resource('cities', AdminCityController::class)
         ->except(['show'])
         ->names([
             'index' => 'cities.index',
@@ -71,7 +80,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         ]);
 
     // Управление отелями
-    Route::resource('hotels', HotelController::class)
+    Route::resource('hotels', AdminHotelController::class)
         ->except(['show'])
         ->names([
             'index' => 'hotels.index',
@@ -82,7 +91,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
             'destroy' => 'hotels.destroy'
         ]);
 
-// Управление апартаментами
+    // Управление апартаментами
     Route::resource('apartments', ApartmentController::class)
         ->except(['show', 'index'])
         ->names([
@@ -92,11 +101,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
             'update' => 'apartments.update',
             'destroy' => 'apartments.destroy'
         ]);
+
     // Дополнительные маршруты
-    Route::get('statistics', [DashboardController::class, 'statistics'])
-        ->name('statistics');
-
-    Route::get('settings', [DashboardController::class, 'settings'])
-        ->name('settings');
+    Route::get('statistics', [DashboardController::class, 'statistics'])->name('statistics');
+    Route::get('settings', [DashboardController::class, 'settings'])->name('settings');
 });
-

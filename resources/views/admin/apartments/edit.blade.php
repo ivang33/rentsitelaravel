@@ -131,28 +131,30 @@
 
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Время заезда/выезда</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Даты заезда/выезда</h6>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="check_in_time">Время заезда *</label>
-                                        <input type="time" name="check_in_time" id="check_in_time"
-                                               class="form-control @error('check_in_time') is-invalid @enderror"
-                                               value="{{ old('check_in_time', $apartment->check_in_time) }}" required>
-                                        @error('check_in_time')
+                                        <label for="check_in_date">Дата заезда *</label>
+                                        <input type="date" name="check_in_date" id="check_in_date"
+                                               class="form-control @error('check_in_date') is-invalid @enderror"
+                                               value="{{ old('check_in_date', $apartment->check_in_date->format('Y-m-d')) }}" required
+                                               min="{{ date('Y-m-d') }}">
+                                        @error('check_in_date')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="check_out_time">Время выезда *</label>
-                                        <input type="time" name="check_out_time" id="check_out_time"
-                                               class="form-control @error('check_out_time') is-invalid @enderror"
-                                               value="{{ old('check_out_time', $apartment->check_out_time) }}" required>
-                                        @error('check_out_time')
+                                        <label for="check_out_date">Дата выезда *</label>
+                                        <input type="date" name="check_out_date" id="check_out_date"
+                                               class="form-control @error('check_out_date') is-invalid @enderror"
+                                               value="{{ old('check_out_date', $apartment->check_out_date->format('Y-m-d')) }}" required
+                                               min="{{ date('Y-m-d', strtotime('+1 day')) }}">
+                                        @error('check_out_date')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -160,6 +162,7 @@
                             </div>
                         </div>
                     </div>
+
 
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">

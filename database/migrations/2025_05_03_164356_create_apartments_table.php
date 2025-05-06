@@ -17,8 +17,8 @@ return new class extends Migration
             $table->decimal('price_per_night', 10, 2); // Цена за ночь
             $table->integer('room_count'); // Количество комнат
             $table->integer('capacity')->nullable(); // Вместимость (сколько человек)
-            $table->time('check_in_time'); // Время заезда
-            $table->time('check_out_time'); // Время выезда
+            $table->date('check_in_date')->nullable(); // Дата заезда
+            $table->date('check_out_date')->nullable(); // Дата выезда
             $table->text('description')->nullable(); // Основное описание
             $table->text('descriptions')->nullable(); // Дополнительные описания (если нужно дублирование)
             $table->text('additional_info')->nullable(); // Дополнительная информация
