@@ -1,15 +1,20 @@
 <?php
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Review extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
-        'review_text', 'review_date', 'user_id', 'apartment_id',
+        'review_text',
+        'user_id',
+        'apartment_id',
+        'review_date'
+    ];
+
+    protected $casts = [
+        'review_date' => 'datetime',
     ];
 
     public function user()

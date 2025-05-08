@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,8 +10,13 @@ class Booking extends Model
     use HasFactory;
 
     protected $fillable = [
-        'check_in_date', 'check_out_date', 'guest_count', 'status', 'total_price',
-        'apartment_id', 'user_id',
+        'check_in_date',
+        'check_out_date',
+        'guest_count',
+        'status',
+        'total_price',
+        'apartment_id',
+        'user_id',
     ];
 
     public function apartment()

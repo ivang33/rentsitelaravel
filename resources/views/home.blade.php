@@ -9,20 +9,34 @@
             <p>Удобные апартаменты и отели по всему миру</p>
 
             <!-- Поиск -->
-            <form action="{{ route('apartments.index') }}" method="GET" class="search-form mt-4">
+            <form action="{{ route('cities.search') }}" method="GET" class="search-form mt-4">
                 <div class="row g-3 justify-content-center">
                     <div class="col-md-3">
-                        <input type="text" name="city" class="form-control" placeholder="Город">
+                        <input type="text" name="city" id="city-input" class="form-control" placeholder="Город" list="city-suggestions" autocomplete="off" required>
+                        <datalist id="city-suggestions">
+                            @foreach($cities as $city)
+                                <option value="{{ $city->city_name }}"></option>
+                            @endforeach
+                        </datalist>
                     </div>
                     <div class="col-md-3">
-                        <input type="date" name="check_in" class="form-control">
+                        <input type="date" name="check_in" class="form-control" placeholder="Заезд">
                     </div>
                     <div class="col-md-3">
-                        <input type="date" name="check_out" class="form-control">
+                        <input type="date" name="check_out" class="form-control" placeholder="Выезд">
                     </div>
                     <div class="col-md-3">
                         <button type="submit" class="btn btn-primary w-100">Поиск</button>
                     </div>
+                    @if ($errors->any())
+                        <div class="alert alert-danger mt-3">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                 </div>
             </form>
         </div>
@@ -38,9 +52,16 @@
                     <div class="col-md-3 mb-4">
                         <a href="{{ route('cities.show', $city) }}" class="text-decoration-none">
                             <div class="card h-100">
-                                <img src="{{ asset('storage/' . $city->photo) }}" class="card-img-top" alt="{{ $city->city_name }}" style="height: 180px; object-fit: cover;">
+                                <!-- Изображение города -->
+                                @if($city->photo)
+                                    <img src="{{ asset('storage/' . $city->photo) }}" class="card-img-top">
+                                @else
+                                    <img src="{{ asset('images/default-city.jpg') }}" class="card-img-top">
+                                @endif
+
                                 <div class="card-body">
-                                    <h5 class="card-title text-dark">{{ $city->city_name }}</h5>
+                                    <h5 class="card-title">{{ $city->city_name }}</h5>
+                                    <p class="card-text">{{ Str::limit($city->description, 50) }}</p>
                                 </div>
                             </div>
                         </a>
@@ -70,4 +91,28 @@
             </div>
         </div>
     </section>
+@endsection
+@section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cities = @json($cities->pluck('city_name')); // Получаем только названия городов
+
+            const cityInput = document.getElementById('city-input');
+            const datalist = document.getElementById('city-suggestions');
+
+            if (cityInput && datalist) {
+                // Заполняем datalist вариантами городов
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    datalist.appendChild(option);
+                });
+
+                // Опционально: можно добавить обработчик ввода для динамического поиска
+                cityInput.addEventListener('input', function() {
+                    // Можно добавить логику для динамической фильтрации
+                });
+            }
+        });
+    </script>
 @endsection

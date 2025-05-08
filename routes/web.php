@@ -10,7 +10,9 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CityController; // Публичный контроллер
 use App\Http\Controllers\HotelController;
-
+use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ReviewController;
 // === Публичные маршруты ===
 
 // Главная страница
@@ -18,14 +20,21 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Страница города с отелями (Публичная)
 Route::get('/cities/{city}', [CityController::class, 'show'])->name('cities.show');
-Route::get('/cities/{city}', [CityController::class, 'show'])->name('cities.show');
 Route::get('/cities/{city}/sort-by-price', [CityController::class, 'sortByPrice'])->name('cities.sort_by_price');
 Route::get('/cities/{city}/sort-by-rating', [CityController::class, 'sortByRating'])->name('cities.sort_by_rating');
 
+Route::get('/search', [CityController::class, 'search'])->name('cities.search');
+
 Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('hotels.show');
 
-
-
+Route::middleware(['auth'])->group(function () {
+    Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+    Route::post('/favorites/{apartment}', [FavoriteController::class, 'store'])->name('favorites.store');
+    Route::delete('/favorites/{favorite}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
+});
+Route::post('/bookings', [BookingController::class, 'store'])
+    ->name('bookings.store')
+    ->middleware('auth');
 // Просмотр апартаментов
 Route::resource('apartments', ApartmentController::class)
     ->only(['index', 'show'])
@@ -33,7 +42,9 @@ Route::resource('apartments', ApartmentController::class)
         'index' => 'apartments.index',
         'show' => 'apartments.show'
     ]);
-
+Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+Route::get('/profile/reviews', [ReviewController::class, 'myReviews'])->name('profile.reviews');
 // Аутентификация
 Route::middleware('guest')->group(function () {
     Route::controller(LoginController::class)->group(function () {
@@ -46,7 +57,15 @@ Route::middleware('guest')->group(function () {
         Route::post('/register', 'register');
     });
 });
+// Страница контактов
+Route::get('/contacts', function () {
+    return view('pages.contacts');
+})->name('contacts');
 
+// Страница "Я сдаю"
+Route::get('/listings/create', function () {
+    return view('pages.listing-create');
+})->name('listings.create');
 // Выход
 Route::middleware('auth')->post('/logout', [LoginController::class, 'logout'])->name('logout');
 
