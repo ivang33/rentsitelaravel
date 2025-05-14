@@ -6,9 +6,13 @@ use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public function index(): View
+    public function index()
     {
-        $cities = City::all();
-        return view('home', compact('cities'));
+        $cities = City::all(); // Получаем все города
+        $randomCities = $cities->random(3); // Выбираем 3 случайных города
+
+        return view('home', [
+            'cities' => $randomCities,
+        ]);
     }
 }
