@@ -23,7 +23,7 @@
                 <ul class="list-unstyled">
                     <li>
                         <i class="fas fa-envelope me-2"></i>
-                        Электронная почта: <a href="mailto:admin@tvil.ru">admin@tvil.ru</a>
+                        Электронная почта: <a href="mailto:ivan.galatsan.01@mail.ru">ivan.galatsan.01@mail.ru</a>
                     </li>
                     <li>
                         <i class="fas fa-map-marker-alt me-2"></i>
@@ -34,7 +34,7 @@
             <div class="col-md-6">
                 <h5>Реквизиты</h5>
                 <p>
-                    Компания ООО «ТВИЛ СОФТ»;<br>
+                    Компания ООО «РЕНТ СОФТ»;<br>
                     ОГРН 1217700160061;<br>
                     ИНН 9731077781;<br>
                     КПП 773101001;<br>
@@ -49,7 +49,7 @@
 
         <!-- Подвал -->
         <footer class="mt-5 text-center">
-            <p class="mb-0">О ТВИЛ говорят, ТВИЛ доверяют</p>
+            <p class="mb-0">О RENT говорят, RENT доверяют</p>
         </footer>
     </div>
 @endsection

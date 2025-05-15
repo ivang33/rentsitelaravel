@@ -207,7 +207,7 @@
     <div class="footer-column">
         <h5>Наши соц-сети</h5>
         <div class="social-icons">
-            <a href="#"><i class="bi bi-vk"></i></a>
+            <a href="#"><i class="bi bi-twitter"></i></a>
             <a href="#"><i class="bi bi-telegram"></i></a>
             <a href="#"><i class="bi bi-youtube"></i></a>
         </div>

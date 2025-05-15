@@ -270,11 +270,7 @@
                             <div class="alert alert-info">
                                 <div class="d-flex justify-content-between">
                                     <span>Цена за ночь:</span>
-                                    <strong id="nightPriceDisplay">₽0</strong>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <span>Общая стоимость:</span>
-                                    <strong id="totalPriceDisplay">₽0</strong>
+                                    <strong id="nightPriceDisplay">₽{{ number_format($apartment->price_per_night, 0, '', ' ') }}</strong>
                                 </div>
                             </div>
 

@@ -127,7 +127,7 @@
             <form action="{{ route('cities.search') }}" method="GET" class="search-form mt-4">
                 <div class="row g-3 justify-content-center">
                     <div class="col-md-3">
-                        <input type="text" name="city" id="city-input" class="form-control" placeholder="Где вы будете?" list="city-suggestions" autocomplete="off" required>
+                        <input type="text" name="city" id="city-input" class="form-control" placeholder="Куда поедете?" list="city-suggestions" autocomplete="off" required>
                         <datalist id="city-suggestions">
                             @foreach($cities as $city)
                                 <option value="{{ $city->city_name }}"></option>
