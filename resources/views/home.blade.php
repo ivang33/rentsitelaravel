@@ -225,26 +225,28 @@
 @endsection
 
 @section('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const cities = @json($cities->pluck('city_name'));
+    @if($cities->isNotEmpty())
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const cities = @json($cities->pluck('city_name')->toArray());
 
-            const cityInput = document.getElementById('city-input');
-            const datalist = document.getElementById('city-suggestions');
+                const cityInput = document.getElementById('city-input');
+                const datalist = document.getElementById('city-suggestions');
 
-            if (cityInput && datalist) {
-                // Заполняем datalist вариантами городов
-                cities.forEach(city => {
-                    const option = document.createElement('option');
-                    option.value = city;
-                    datalist.appendChild(option);
-                });
+                if (cityInput && datalist) {
+                    // Заполняем datalist вариантами городов
+                    cities.forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city;
+                        datalist.appendChild(option);
+                    });
 
-                // Опционально: можно добавить обработчик ввода для динамического поиска
-                cityInput.addEventListener('input', function () {
-                    // Можно добавить логику для динамической фильтрации
-                });
-            }
-        });
-    </script>
+                    // Опционально: можно добавить обработчик ввода для динамического поиска
+                    cityInput.addEventListener('input', function () {
+                        // Можно добавить логику для динамической фильтрации
+                    });
+                }
+            });
+        </script>
+    @endif
 @endsection
