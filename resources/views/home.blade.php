@@ -135,23 +135,14 @@
                         </datalist>
                     </div>
                     <div class="col-md-3">
-                        <input type="date" name="check_in" class="form-control" placeholder="Заезд">
+                        <input type="date" name="check_in" class="form-control" placeholder="Заезд" required>
                     </div>
                     <div class="col-md-3">
-                        <input type="date" name="check_out" class="form-control" placeholder="Выезд">
+                        <input type="date" name="check_out" class="form-control" placeholder="Выезд" required>
                     </div>
                     <div class="col-md-3">
                         <button type="submit" class="btn btn-primary w-100">Найти дом!</button>
                     </div>
-                    @if ($errors->any())
-                        <div class="alert alert-danger mt-3">
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
                 </div>
             </form>
         </div>

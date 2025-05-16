@@ -265,15 +265,6 @@
                                 <label for="check_out_date" class="form-label">Дата выезда</label>
                                 <input type="date" class="form-control" name="check_out_date" required>
                             </div>
-
-                            <!-- Отображение цены -->
-                            <div class="alert alert-info">
-                                <div class="d-flex justify-content-between">
-                                    <span>Цена за ночь:</span>
-                                    <strong id="nightPriceDisplay">₽{{ number_format($apartment->price_per_night, 0, '', ' ') }}</strong>
-                                </div>
-                            </div>
-
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                                 <button type="submit" class="btn btn-primary">Отправить заявку</button>
@@ -312,11 +303,9 @@
             const button = event.relatedTarget;
             const apartmentId = button.getAttribute('data-apartment-id');
             const apartmentName = button.getAttribute('data-apartment-name');
-            const apartmentPrice = parseFloat(button.getAttribute('data-apartment-price')) || 0;
 
             document.getElementById('apartmentId').value = apartmentId;
             document.getElementById('apartmentName').textContent = apartmentName;
-            document.getElementById('nightPriceDisplay').textContent = '₽' + apartmentPrice.toLocaleString();
         });
     </script>
 @endpush

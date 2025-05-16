@@ -32,9 +32,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/favorites/{apartment}', [FavoriteController::class, 'store'])->name('favorites.store');
     Route::delete('/favorites/{favorite}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
 });
-Route::post('/bookings', [BookingController::class, 'store'])
-    ->name('bookings.store')
-    ->middleware('auth');
+    Route::post('/bookings', [BookingController::class, 'store'])
+        ->name('bookings.store')
+        ->middleware('auth');
 // Просмотр апартаментов
 Route::resource('apartments', ApartmentController::class)
     ->only(['index', 'show'])

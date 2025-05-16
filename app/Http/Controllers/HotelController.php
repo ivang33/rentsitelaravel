@@ -13,4 +13,5 @@ class HotelController extends Controller
 
         return view('hotels.show', compact('hotel'));
     }
+
 }
